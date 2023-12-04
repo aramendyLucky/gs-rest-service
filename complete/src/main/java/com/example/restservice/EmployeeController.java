@@ -1,24 +1,31 @@
 package com.example.restservice;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-    private final Employees employees;  // Asegúrate de tener una referencia a la clase Employees
 
-    // Constructor
-    public EmployeeController(Employees employees) {
-        this.employees = employees;
+    private final EmployeeManager employeeManager;
+
+    @Autowired
+    public EmployeeController(EmployeeManager employeeManager) {
+        this.employeeManager = employeeManager;
     }
 
-    // Endpoint para obtener todos los datos de usuario
+    // Endpoint para obtener la lista de empleados
     @GetMapping
-    public List<Employee> getAllEmployees() {
-        return employees.getEmployeeList();
+    public List<Employee> getEmployees() {
+        return employeeManager.getAllEmployees();
+    }
+
+    // Endpoint para agregar un nuevo empleado mediante una solicitud POST
+    @PostMapping
+    public Employee addEmployee(@RequestBody Employee employee) {
+        // Agregar lógica para validar y guardar el nuevo empleado
+        return employeeManager.addEmployee(employee);
     }
 }
